@@ -1,6 +1,6 @@
 # Computing Fiber Products In Pursuit of S
 
-  Fiber_Product.py is a python program that computes the fiber products necessary in the construction of the set S for the triangle Artin group A_{2,3,8} from the paper https://arxiv.org/abs/2412.07063. The relevant graphs are represented by the variables W, Y1, bY1, Y2, Y3, bY3 and Y4. The build_F3 function allows the user to view each of graphs as a graphic made with the turtle package.
+  The program fiber_product.py is a python program that computes the fiber products necessary in the construction of the set S for the triangle Artin group A_{2,3,8} from the paper https://arxiv.org/abs/2412.07063. The relevant graphs are represented by the variables W, Y1, bY1, Y2, Y3, bY3 and Y4. The build_F3 function allows the user to view each of graphs as a graphic made with the turtle package.
 
   To explore the connected components of the fiber product of a pair from this set of graphs, pass the pair of graphs into the check_fiber function. The check_fiber function performs
 the fiber product of the input graphs, then uses the split function to create a dictionary of the connected components of the fiber product. You will then be prompted to choose a key
