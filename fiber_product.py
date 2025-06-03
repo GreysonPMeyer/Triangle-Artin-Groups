@@ -165,7 +165,7 @@ def find_incidence (v, graph):
   return incidence
 
 def split(graph):
-  # Returns a dictionary of the connected components of graph with more than one vertex
+  # Returns a dictionary of the connected components of a graph with more than one vertex
 
   x_edges = graph[0]
   y_edges = graph[1]
@@ -211,6 +211,7 @@ def readable_keys(d):
   return better_d
 
 def what_subgraph(graph):
+  # Classifies each connected component as being a subgraph of one of the non q-contractible graphs, or else classifies the graph as q-contractible
   green_edges = graph[1]
   red_edges = graph[0]
   rgbigons = []
@@ -220,6 +221,7 @@ def what_subgraph(graph):
       if ((green[1] == red[0]) and (green[0] == red[1])):
         rgbigons.append([green, red])
   
+  # If the connected component has exactly one red-green bigon, it is considered to be a subgraph of Y_1
   if len(rgbigons) == 1:
     return [1, 'Y1']
   
@@ -229,22 +231,25 @@ def what_subgraph(graph):
     green1 = bigon1[0]
     green2 = bigon2[0]
 
+    # If there are two connected red-green bigons, then the graph is considered to be a subgraph of W
     if ((green1[1] == green2[0]) or (green2[1] == green1[0])):
       return [0, 'W']
     
     checker = 0
 
+    # If there is a green edge, then a red edge attached to a red-green bigon, then the graph is considered to be a subgraph of Y_1
     for green in green_edges:
       if green1[1] == green[0]:
         for red in red_edges:
           if red[0] == green[1]:
             checker = 1
             return [1, 'Y1']
-          
+    
+    # Any other graph containing multiple red-green bigons is considered to be a subgraph of \beta(Y_1)
     if checker == 0:
       return [2, 'bY1']
     
-  # Checks for the length-10 loop that both Y2 and Y3 have
+  # Checks for the length-10 loop that both Y2 and Y3 have, and then decides whether the graph is a subgraph of Y_2 or Y_3
   for green in green_edges:
     if green[0][1] % 10 == 2:
       for red in red_edges:
@@ -278,7 +283,7 @@ def what_subgraph(graph):
                                               else:
                                                 return [4, 'Y3']
 
-  # Checks for the length-12 loop that Y2 and bY3 have. The previous block takes care of the full copies of Y2, and any subgraphs of Y2 containing this loop are also subgraphs of bY3, so we choose to label it bY3
+  # Checks for the length-12 loop that Y_2 and \beta(Y_3) have. The previous block takes care of the full copies of Y_2, and any subgraphs of Y_2 containing this loop are also subgraphs of \beta(Y_3), so we choose to label it bY3
   for green in green_edges:
     if green[0][1] % 10 == 2:
       for red in red_edges:
@@ -305,7 +310,7 @@ def what_subgraph(graph):
                                                 if ((red6[1] == green6[0]) and (red6[0] == green[0])):
                                                   return [5, 'bY3']
 
-  # Checks for the length-12 loop that Y3 has
+  # Checks for the length-12 loop that Y_3 has
   for green in green_edges:
     if green[0][1] % 10 == 1:
       for red in red_edges:
@@ -335,8 +340,7 @@ def what_subgraph(graph):
   return [6, 'q-contractible']
                                                     
 def check_fiber(graph1, graph2):
-    #Performs the fiber product of graph1 and graph2 over \bar{U}, then splits the graph into a dictionary
-    # of its connected components. It then prompts the user to choose a connected component for it to draw
+    #Performs the fiber product of graph1 and graph2 over \bar{U}, then splits the graph into a dictionary of its connected components. It then prompts the user to choose a connected component for it to draw
 
     new = fiber_product(graph1,graph2)
     new_split = split(new)
@@ -360,6 +364,7 @@ def check_fiber(graph1, graph2):
     return interesting_dict
 
 def check_row(graph1, graph2):
+  # Populates the rows of the table in the paper
   row = [0, 0, 0, 0, 0, 0, 0]
   new = fiber_product(graph1,graph2)
   new_split = split(new)
@@ -385,6 +390,7 @@ def check_row(graph1, graph2):
   return row
   
 def check_row_Y4xY4(graph):
+  # Special version of check_row since Y_4_x_Y_4 is huge
   row = [0, 0, 0, 0, 0, 0, 0]
   just_red = 0
   sub_of_triangle = 0
