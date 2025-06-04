@@ -140,7 +140,7 @@ def build_F3(graph):
         t.penup()
   turtle.done()
 
-def find_incidence (v, graph):
+def find_incidence (vertex, graph):
   # Finds all of the vertices in graph that are in the connected component containing v
 
   x_edges = graph[0]
@@ -148,19 +148,19 @@ def find_incidence (v, graph):
   d_edges = graph[2]
   incidence = []
   for j in x_edges:
-    if v == j[0] and j[1] not in incidence:
+    if vertex == j[0] and j[1] not in incidence:
       incidence.append(j[1])
-    if v == j[1] and j[0] not in incidence:
+    if vertex == j[1] and j[0] not in incidence:
       incidence.append(j[0])
     for j in y_edges:
-      if v == j[0] and j[1] not in incidence:
+      if vertex == j[0] and j[1] not in incidence:
         incidence.append(j[1])
-      if v == j[1] and j[0] not in incidence:
+      if vertex == j[1] and j[0] not in incidence:
         incidence.append(j[0])
     for j in d_edges:
-      if v == j[0] and j[1] not in incidence:
+      if vertex == j[0] and j[1] not in incidence:
         incidence.append(j[1])
-      if v == j[1] and j[0] not in incidence:
+      if vertex == j[1] and j[0] not in incidence:
         incidence.append(j[0])
   return incidence
 
