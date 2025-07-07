@@ -3,7 +3,7 @@ import math
 import tkinter as tkinter
 
 def fiber_product(graph1, graph2):
-  # Calculates the fiber product of two graphs that can be completed to covers of \bar{U}
+  # Calculates the fiber product of two graphs that combinatorially immerse into \tilde{U}
   new_x_arrows = []
   new_y_arrows = []
   new_d_arrows = []
@@ -42,7 +42,7 @@ def fiber_product(graph1, graph2):
   return new_graph
 
 def build_F3(graph):
-  # Draws a graph that can be completed to a cover of \bar{U}
+  # Draws a graph that combinatorially immerses into \tilde{U}
   win_width, win_height, bg_color = 10000, 10000, 'black'
   turtle.setup()
   turtle.screensize(win_width, win_height, bg_color)
@@ -141,7 +141,7 @@ def build_F3(graph):
   turtle.done()
 
 def find_incidence (vertex, graph):
-  # Finds all of the vertices in graph that are in the connected component containing v
+  # Finds all of the vertices in graph that are in the connected component containing vertex
 
   x_edges = graph[0]
   y_edges = graph[1]
@@ -172,10 +172,12 @@ def split(graph):
   d_edges = graph[2]
   vertices = graph[3]
   d = dict()
+  # for each vertex it puts all of the vertices in the connected component containing that vertex in the 3rd position, including the vertex itself
   for i in vertices:
     d[i] = [[], [], [], []]
     d[i][3] = find_incidence(i, graph)
     d[i][3].append(i)
+  # All of the edges touching that vertex are added to the other indices of d[k]
   for k in d:
     for edge in x_edges:
       if k == edge[0] or k == edge[1]:
@@ -187,8 +189,10 @@ def split(graph):
       if k == edge[0] or k == edge[1]:
         d[k][2].append(edge)
   keys_to_delete = []
+  # This is where we find the redundant elements of the dictionary and mark them for deletion
   for j in vertices:
     for k in vertices:
+      # if j and k both share vertices, that means that they are part of the same connected component. So j absorbs all of k's edge info and then k is later deleted.
       if (j != k) and (len(set(d[j][3]) & set(d[k][3])) != 0):
         d[j][0] = list(set(d[j][0]) | set(d[k][0]))
         d[j][1] = list(set(d[j][1]) | set(d[k][1]))
@@ -211,7 +215,8 @@ def readable_keys(d):
   return better_d
 
 def what_subgraph(graph):
-  # Classifies each connected component as being a subgraph of one of the non q-contractible graphs, or else classifies the graph as q-contractible
+  # Classifies each connected component as being a subgraph of one of the non q-contractible graphs, or else classifies the graph as q-contractible. This function was not used to prove that no new non q-contractible connected components arise. The author proved that by going through every connected component by hand. This function is simply to be used to partition the connected components after the lack of new non q-contractible connected components has already been established.
+
   green_edges = graph[1]
   red_edges = graph[0]
   rgbigons = []
@@ -337,10 +342,11 @@ def what_subgraph(graph):
                                                 if red6[0] == red5[1]:
                                                   if red6[1] == green[0]:
                                                     return [4, 'Y3']
+
   return [6, 'q-contractible']
                                                     
 def check_fiber(graph1, graph2):
-    #Performs the fiber product of graph1 and graph2 over \bar{U}, then splits the graph into a dictionary of its connected components. It then prompts the user to choose a connected component for it to draw
+    #Performs the fiber product of graph1 and graph2, then splits the graph into a dictionary of its connected components. It then prompts the user to choose a connected component for it to draw
 
     new = fiber_product(graph1,graph2)
     new_split = split(new)
@@ -350,9 +356,9 @@ def check_fiber(graph1, graph2):
     for key in new_split.keys():
         g = new_split[key]
         if (len(g[1]) == 0 and len(g[2]) == 0):
-            just_red += 1
+            just_red += 1 # This connected component only has red edges
         elif len(g[0]) == 0 and len(g[1]) <= 3:
-            sub_of_triangle += 1
+            sub_of_triangle += 1 # This connected component is a subgraph of a triangle
         else:
             interesting_dict[key] = g
     final_dict = readable_keys(interesting_dict)
